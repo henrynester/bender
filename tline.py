@@ -17,97 +17,87 @@ import ezdxf
 import ezdxf.path
 from ezdxf.math import Vec3
 
+
 class FishboneUnitCell:
     def __init__(self, cell_length, fishbone_length, fishbone_height, line_width, gnd_spacing=2e-6, interdigitate=True):
         self.line_width, self.cell_length, self.fishbone_height, self.fishbone_length, self.gnd_spacing, self.interdigitate = \
             line_width, cell_length, fishbone_height, fishbone_length, gnd_spacing, interdigitate
 
     def vertices(self):
-        xvals1=[0,
-               self.cell_length/2 - self.fishbone_length/2, self.cell_length/2 - self.fishbone_length/2,
-               self.cell_length/2 + self.fishbone_length/2, self.cell_length/2 + self.fishbone_length/2,
-               self.cell_length]
-        #yvals=[self.fishbone_length+self.line_width/2, self.fishbone_length+self.line_width/2, self.line_width/2, self.line_width/2]
+        xvals1 = [0,
+                  self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
+                  self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
+                  self.cell_length]#, self.cell_length,
+                  # self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
+                  # self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
+                  # 0]
+
         yvals1 = [self.line_width / 2,
-                 self.line_width/2, self.fishbone_height + self.line_width / 2,
-                 self.fishbone_height + self.line_width / 2, self.line_width / 2,
-                 self.line_width / 2 ]
-        #changed this to make fishbone unit symmetric
+                  self.line_width / 2, self.fishbone_height + self.line_width / 2,
+                  self.fishbone_height + self.line_width / 2, self.line_width / 2,
+                  self.line_width / 2]#, -self.line_width / 2,
+                  # -self.line_width / 2, -self.fishbone_height - self.line_width / 2,
+                  # -self.fishbone_height - self.line_width / 2, -self.line_width / 2,
+                  # -self.line_width / 2
+                  # ]
 
         return np.array((xvals1, yvals1))
-
-    def vertices_gnd(self):
-        gnd_height = self.line_width/2+self.fishbone_height+self.gnd_spacing
-        if self.interdigitate:
-            return np.array(((self.cell_length,
-                              self.cell_length/2 + self.fishbone_length/2 + self.gnd_spacing, self.cell_length/2 + self.fishbone_length/2 + self.gnd_spacing,
-                              self.cell_length/2 - self.fishbone_length/2 - self.gnd_spacing, self.cell_length/2 - self.fishbone_length/2 - self.gnd_spacing,
-                              0),
-                             (self.line_width/2+self.gnd_spacing, 
-                              self.line_width/2+self.gnd_spacing, gnd_height,
-                              gnd_height, self.line_width/2+self.gnd_spacing, 
-                              self.line_width/2+self.gnd_spacing)))
-        else:
-            return np.array(((self.cell_length, 0),
-                             (gnd_height, gnd_height)))
 
 
 class FloquetUnitCell:
     def __init__(self):
-        self.fishbones=[]
-    
+        self.fishbones = []
+
     def append_fishbones(self, fishbone_cell, n_fishbones=1):
         for n in range(n_fishbones):
             self.fishbones = np.append(self.fishbones, fishbone_cell)
-            
+
     def vertices(self):
-        v=np.array([[],[]])
-        xstart=0
+        v = np.array([[], []])
+        xstart = 0
         for fishbone in self.fishbones:
-            fishbone_vertices=fishbone.vertices()
-            fishbone_vertices[0,:]+=xstart
-            v=np.append(v, fishbone_vertices, axis=1)
+            fishbone_vertices = fishbone.vertices()
+            fishbone_vertices[0, :] += xstart
+            v = np.append(v, fishbone_vertices, axis=1)
             xstart += fishbone.cell_length
 
         for fishbone in reversed(self.fishbones):
             xstart -= fishbone.cell_length
-            gnd_vertices = fishbone.vertices_gnd()
-            gnd_vertices[0,:]+=xstart
-            v=np.append(v, gnd_vertices, axis=1)
+            reverse_vertices = fishbone.vertices()
+            reverse_vertices = reverse_vertices[:, ::-1]
+            reverse_vertices[1] = -reverse_vertices[1]
+            reverse_vertices[0,:]+=xstart
+            v=np.append(v, reverse_vertices, axis=1)
 
+        v = np.append(v, v[:,0:1], axis=1)
         return v
 
     def cell_length(self):
         return sum([fishbone.cell_length for fishbone in self.fishbones])
 
     def cell_min_spacing(self):
-        return max(np.concatenate([fishbone.vertices()[1,:] for fishbone in self.fishbones]))
+        return max(np.concatenate([fishbone.vertices()[1, :] for fishbone in self.fishbones]))
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     pass
     import track
-    fishboneA= FishboneUnitCell(8e-6, 2e-6, 42e-6, 2e-6, gnd_spacing=2e-6, interdigitate=True)
-    acpw = FloquetUnitCell()
-    acpw.append_fishbones(fishboneA, 14)
-    xs, ys = acpw.vertices()
 
-    mir_ys = -ys
+    fishboneA = FishboneUnitCell(8e-6, 2e-6, 42e-6, 2e-6, gnd_spacing=2e-6, interdigitate=True)
+    ustrip = FloquetUnitCell()
+    ustrip.append_fishbones(fishboneA, 14)
+    xs, ys = ustrip.vertices()
+
     straight1 = track.StraightTrack(np.array([0, 0]), np.array([1e-6, 0]))
 
-
-    fig,ax=plt.subplots()
-    ax.plot(xs,ys)
-    ax.plot(xs, mir_ys)
+    fig, ax = plt.subplots()
+    ax.plot(xs, ys)
     # for i in range(len(xs)):
     #     ax.annotate(str(i), (xs[i],ys[i]))
     plt.show()
 
-
     merged_list = [(xs[i], ys[i]) for i in range(0, len(xs))]
     # merged_list_gnd = [(xgnd[i], ygnd[i]) for i in range(0, len(xgnd))]
-    merge_list_mir = [(xs[i], mir_ys[i]) for i in range(0, len(xs))]
-    # merged_list_mir_gnd = [(xgnd[i], mir_ygnd[i]) for i in range(0, len(xgnd))]
-
 
     doc = ezdxf.new()
     msp = doc.modelspace()
@@ -122,9 +112,7 @@ if __name__=='__main__':
 
     # out = ezdxf.path.render_lwpolylines(layout=msp, paths={pp})
 
-
     # Save the DXF file
     doc.saveas("unitcell.dxf")
 
     # print(merged_list)
-

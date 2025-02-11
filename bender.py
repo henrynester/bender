@@ -37,8 +37,6 @@ class Bender:  # uh oh
             ax.plot(self.bent_xs, self.bent_ys, marker='.', color='black')
             plt.show()
 
-    def mirror_tline(self):
-        self.tline_vertices[1,:] *= -1
 
     def create_dxf(self):
         self.doc = ezdxf.new()
@@ -57,23 +55,19 @@ class Bender:  # uh oh
         self.doc.saveas(filename)
 
 if __name__ == '__main__':
-    filename = 'straight_gnd_10GHz.dxf'
-    wcenter = 8e-6
-    wline = 40e-6 - wcenter
-    wload = 80e-6 - wcenter
-    fishboneA, fishboneB = tline.FishboneUnitCell(4e-6, 2e-6, wline/2, wcenter, gnd_spacing=2e-6, interdigitate=False), \
-                            tline.FishboneUnitCell(4e-6, 2e-6, wload/2, wcenter, gnd_spacing=2e-6, interdigitate=False)
+    filename = 'test1.dxf'
+    feature_size = 1.5e-6
+    wcenter = feature_size
+    wline = 45e-6 - wcenter
+    wload = 30e-6 - wcenter
+    fishboneA, fishboneB = tline.FishboneUnitCell(8e-6, feature_size, wline/2, wcenter, gnd_spacing=2e-6, interdigitate=True), \
+                            tline.FishboneUnitCell(8e-6, feature_size, wload/2, wcenter, gnd_spacing=2e-6, interdigitate=True)
     # wcenter = 8e-6
     # wline = 40e-6 - wcenter
     # fishboneA = tline.FishboneUnitCell(4e-6, 2e-6, wline/2, wcenter, gnd_spacing=2e-6, interdigitate=False)
     floquet = tline.FloquetUnitCell()
-    floquet.append_fishbones(fishboneA, 71)
-    floquet.append_fishbones(fishboneB, 25)
-    floquet.append_fishbones(fishboneA, 142)
-    floquet.append_fishbones(fishboneB, 25)
-    floquet.append_fishbones(fishboneA, 139)
-    floquet.append_fishbones(fishboneB, 30)
-    floquet.append_fishbones(fishboneA, 68)
+    floquet.append_fishbones(fishboneA, 1)
+
 
 
 
@@ -98,34 +92,42 @@ if __name__ == '__main__':
 
 
     min_spacing = 5.5*floquet.cell_min_spacing()
-    turns = 5.94
+    turns = 4
     final_angle = turns * 2 * np.pi
 
-    tline_compact_length = 25e-3
+    tline_compact_length = 100e-5
 
-    fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
-    fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
-    arc2 = fermat2.construct_suitable_ArcTrack()
-    arc1 = fermat1.construct_suitable_ArcTrack()
-    straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
-    straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
+    origin = np.array((0, 0))
+    end = np.array((tline_compact_length, 0))
+    straight1 = track.StraightTrack(origin, end)
+    r = 20e-5
+    arc1 = track.ArcTrack(np.array((tline_compact_length, r)),r,-np.pi/2,np.pi/2, False)
+    straight2 = track.StraightTrack(np.array((tline_compact_length, 2*r)), np.array((0, 2*r)))
+
+    # fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
+    # fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
+    # arc2 = fermat2.construct_suitable_ArcTrack()
+    # arc1 = fermat1.construct_suitable_ArcTrack()
+    # straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
+    # straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
 
     trackseq = track.TrackSequence()
-    trackseq.append_track(straight2)
-    trackseq.append_track(arc2)
-    trackseq.append_track(fermat2)
-    trackseq.append_track(fermat1)
-    trackseq.append_track(arc1)
+    # trackseq.append_track(straight2)
+    # trackseq.append_track(arc2)
+    # trackseq.append_track(fermat2)
+    # trackseq.append_track(fermat1)
     trackseq.append_track(straight1)
+    trackseq.append_track(arc1)
+    trackseq.append_track(straight2)
 
     bender = Bender(trackseq, floquet)
     bender.construct_tline()
-    bender.bend_tline(plot=False)
+    bender.bend_tline(plot=True)
     bender.write_bent_tline()
 
-    bender.mirror_tline()
-    bender.bend_tline(plot=False)
-    bender.write_bent_tline()
+    # bender.mirror_tline()
+    # bender.bend_tline(plot=True)
+    # bender.write_bent_tline()
 
     print(floquet.cell_length())
     print(trackseq.total_arclength())
