@@ -1,0 +1,34 @@
+{
+	"tline": {
+		"w_loaded_lines": [
+			40e-6,
+			80e-6,
+			40e-6,
+			80e-6,
+			40e-6,
+			80e-6,
+			40e-6
+		],
+		"n_fishbone_cells": [
+			71,
+			25,
+			142,
+			25,
+			139,
+			30,
+			68
+		],
+		"fishbone_cell_length": 4e-6,
+		"w_fishbone_line": 2e-6,
+		"w_center_line": 8e-6,
+		"gnd_spacing": 2e-6,
+		"gnd_interdigitate": false,
+		"fillet_radius": null
+	},
+	"track": {
+		"style": "fermat",
+		"line_spacing_factor": 5.5,
+		"n_turns": 5.94,
+		"compact_length": 25e-3
+	}
+}

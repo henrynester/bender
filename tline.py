@@ -19,9 +19,8 @@ from ezdxf.math import Vec3
 
 
 class FishboneUnitCell:
-    def __init__(self, cell_length, fishbone_length, fishbone_height, line_width, gnd_spacing=2e-6, interdigitate=True):
-        self.line_width, self.cell_length, self.fishbone_height, self.fishbone_length, self.gnd_spacing, self.interdigitate = \
-            line_width, cell_length, fishbone_height, fishbone_length, gnd_spacing, interdigitate
+    def __init__(self, cell_length, w_center_line, w_fishbone_line, w_line, gnd_spacing, interdigitate):
+        self.cell_length, self.w_center_line, self.w_fishbone_line, self.w_line, self.gnd_spacing, self.interdigitate = cell_length, w_center_line, w_fishbone_line, w_line, gnd_spacing, interdigitate
 
     def vertices(self):
         xvals1 = [0,

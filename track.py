@@ -44,27 +44,35 @@ class Track:
         pass
 
 class FermatSpiralTrack(Track):
-    def __init__(self, n_turns, min_spacing, neg_branch, next_track=None):
+    CACHE_FILENAME='fermat_cache.npy'
+    N_TURNS_MAX = 10
+    PHI_SAMPLED = np.append(np.linspace(0, 1e-4, 1000000), np.linspace(1e-4, N_TURNS_MAX*2*np.pi, 1000000))
+    try:
+        with open(CACHE_FILENAME) as _:
+            pass
+    except FileNotFoundError:
+        print('Recalculating fermat cache...')
+        arclength = s(PHI_SAMPLED)
+        np.save(CACHE_FILENAME.split('.npy')[0], arclength)
+    NORMALIZED_ARCLENGTH_SAMPLED = np.load(CACHE_FILENAME)
+
+    def __init__(self, n_turns, min_spacing, neg_branch):
+        if n_turns > FermatSpiralTrack.N_TURNS_MAX:
+            print('n_turns_max must be < N_TURNS_MAX')
+            raise ValueError()
+
         self.phi_max = n_turns * 2 * np.pi
         self.a = min_spacing / (np.sqrt(self.phi_max) - np.sqrt(self.phi_max-np.pi))
         self.neg_branch=neg_branch
-        self.phi_sampled = np.append(np.linspace(0, 1e-4, 1000000), np.linspace(1e-4, 2*np.pi*n_turns, 1000000))
-        try:
-            with open('arclength.npy') as f:
-                pass
-        except FileNotFoundError:
-            self.arclength_sampled = s(self.phi_sampled)
-            np.save('arclength', self.arclength_sampled)
-        self.arclength_sampled = np.load('arclength.npy') * self.a
-        #plt.plot(self.phi_sampled[:100], self.arclength_sampled[:100]); plt.show()
-        Track.__init__(self, np.interp(self.phi_max, self.phi_sampled, self.arclength_sampled))
+
+        Track.__init__(self, np.interp(self.phi_max, FermatSpiralTrack.PHI_SAMPLED, FermatSpiralTrack.NORMALIZED_ARCLENGTH_SAMPLED)*self.a)
 
 
 
     def _vertices_normals(self, tline_xs):
         if not self.neg_branch:
             tline_xs = self.arclength - tline_xs
-        self.phis = np.interp(tline_xs, self.arclength_sampled, self.phi_sampled)
+        self.phis = np.interp(tline_xs/self.a, FermatSpiralTrack.NORMALIZED_ARCLENGTH_SAMPLED, FermatSpiralTrack.PHI_SAMPLED)
         self.rs = self.a * np.sqrt(self.phis)
         self.normal_angles = self.phis - np.arctan(0.5 / self.phis)
         v = np.array((self.rs * np.cos(self.phis),
