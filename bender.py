@@ -6,7 +6,7 @@ import ezdxf.path
 import progress.bar
 import json, sys
 
-class Bender:  # uh oh
+class Bender:  # uh oh   
     def __init__(self, track_sequence, floquet_unit_cell, fillet_radius=None):
         self.track_sequence, self.floquet_unit_cell = track_sequence, floquet_unit_cell
         self.fillet_radius = fillet_radius
