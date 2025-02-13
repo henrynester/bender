@@ -24,20 +24,20 @@ class FishboneUnitCell:
 
     def vertices(self):
         xvals1 = [0,
-                  self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
-                  self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
+                  self.cell_length / 2 - self.w_line / 2, self.cell_length / 2 - self.w_line / 2,
+                  self.cell_length / 2 + self.w_line / 2, self.cell_length / 2 + self.w_line / 2,
                   self.cell_length]#, self.cell_length,
-                  # self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
-                  # self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
+                  # self.cell_length / 2 + self.w_line / 2, self.cell_length / 2 + self.w_line / 2,
+                  # self.cell_length / 2 - self.w_line / 2, self.cell_length / 2 - self.w_line / 2,
                   # 0]
 
-        yvals1 = [self.line_width / 2,
-                  self.line_width / 2, self.fishbone_height + self.line_width / 2,
-                  self.fishbone_height + self.line_width / 2, self.line_width / 2,
-                  self.line_width / 2]#, -self.line_width / 2,
-                  # -self.line_width / 2, -self.fishbone_height - self.line_width / 2,
-                  # -self.fishbone_height - self.line_width / 2, -self.line_width / 2,
-                  # -self.line_width / 2
+        yvals1 = [self.w_center_line / 2,
+                  self.w_center_line / 2, self.w_fishbone_line + self.w_center_line / 2,
+                  self.w_fishbone_line + self.w_center_line / 2, self.w_center_line / 2,
+                  self.w_center_line / 2]#, -self.w_center_line / 2,
+                  # -self.w_center_line / 2, -self.w_fishbone_line - self.w_center_line / 2,
+                  # -self.w_fishbone_line - self.w_center_line / 2, -self.w_center_line / 2,
+                  # -self.w_center_line / 2
                   # ]
 
         return np.array((xvals1, yvals1))

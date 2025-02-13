@@ -24,10 +24,11 @@ class TrackSequence:
         arclength_conditions = np.array([(arclength_thresholds[i] <= arclengths) & (arclengths < arclength_thresholds[i+1]) \
                                 for i in range(len(arclength_thresholds) - 1)])
 
+
         result = np.zeros((4,len(arclengths)))
 
-        for i in range(len(arclengths)):
 
+        for i in range(len(arclengths)):
             if np.where(arclength_conditions[:,i])[0].size != 0:
                 track_idx = np.where(arclength_conditions[:,i])[0][0]
             else:

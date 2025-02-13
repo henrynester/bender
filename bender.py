@@ -95,24 +95,6 @@ if __name__ == '__main__':
         fishbone = tline.FishboneUnitCell(cfg_tline['fishbone_cell_length'], cfg_tline['w_center_line'], cfg_tline['w_fishbone_line'], w_loaded_line, cfg_tline['gnd_spacing'], cfg_tline['gnd_interdigitate'])
         floquet.append_fishbones(fishbone, n_fishbone_cell)
 
-    #Alec 10GHz
-    # floquet.append_fishbones(fishboneA, 19)
-    # floquet.append_fishbones(fishboneB, 8)
-    # floquet.append_fishbones(fishboneA, 38)
-    # floquet.append_fishbones(fishboneB, 8)
-    # floquet.append_fishbones(fishboneA, 37)
-    # floquet.append_fishbones(fishboneB, 10)
-    # floquet.append_fishbones(fishboneA, 18)
-
-    #Jordan 5GHz
-    # floquet.append_fishbones(fishboneA, 39)
-    # floquet.append_fishbones(fishboneB, 13)
-    # floquet.append_fishbones(fishboneA, 79)
-    # floquet.append_fishbones(fishboneB, 13)
-    # floquet.append_fishbones(fishboneA, 78)
-    # floquet.append_fishbones(fishboneB, 14)
-    # floquet.append_fishbones(fishboneA, 39)
-
 
     trackseq = track.TrackSequence()
     if cfg_track['style'] == 'fermat':
@@ -122,12 +104,12 @@ if __name__ == '__main__':
 
         tline_compact_length = cfg_track['compact_length']
 
-    # fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
-    # fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
-    # arc2 = fermat2.construct_suitable_ArcTrack()
-    # arc1 = fermat1.construct_suitable_ArcTrack()
-    # straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
-    # straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
+        fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
+        fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
+        arc2 = fermat2.construct_suitable_ArcTrack()
+        arc1 = fermat1.construct_suitable_ArcTrack()
+        straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
+        straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
 
         trackseq.append_track(straight2)
         trackseq.append_track(arc2)
