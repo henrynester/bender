@@ -32,7 +32,7 @@ class TrackSequence:
             if np.where(arclength_conditions[:,i])[0].size != 0:
                 track_idx = np.where(arclength_conditions[:,i])[0][0]
             else:
-                track_idx = np.where(arclength_conditions[:,(i-1)])[0][0]
+                track_idx = np.where(arclength_conditions[:,(i-2)])[0][0]
 
             result[:,i] = self.tracks[track_idx]._vertices_normals(arclengths[i] - arclength_thresholds[track_idx])
         return result

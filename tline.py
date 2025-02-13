@@ -82,7 +82,7 @@ if __name__ == '__main__':
     pass
     import track
 
-    fishboneA = FishboneUnitCell(8e-6, 2e-6, 42e-6, 2e-6, gnd_spacing=2e-6, interdigitate=True)
+    fishboneA = FishboneUnitCell(3e-6, 1.5e-6, 42e-6, 1.5e-6, gnd_spacing=10e-6, interdigitate=False)
     ustrip = FloquetUnitCell()
     ustrip.append_fishbones(fishboneA, 14)
     xs, ys = ustrip.vertices()

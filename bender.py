@@ -92,9 +92,15 @@ if __name__ == '__main__':
 
     floquet = tline.FloquetUnitCell()
     for w_loaded_line, n_fishbone_cell in zip(cfg_tline['w_loaded_lines'], cfg_tline['n_fishbone_cells']):
-        fishbone = tline.FishboneUnitCell(cfg_tline['fishbone_cell_length'], cfg_tline['w_center_line'], cfg_tline['w_fishbone_line'], w_loaded_line, cfg_tline['gnd_spacing'], cfg_tline['gnd_interdigitate'])
+        fishbone = tline.FishboneUnitCell(cfg_tline['fishbone_cell_length'], cfg_tline['w_center_line'], w_loaded_line, cfg_tline['w_center_line'], cfg_tline['gnd_spacing'], cfg_tline['gnd_interdigitate'])
         floquet.append_fishbones(fishbone, n_fishbone_cell)
 
+    xs, ys = floquet.vertices()
+    fig, ax = plt.subplots()
+    ax.plot(xs, ys)
+    # for i in range(len(xs)):
+    #     ax.annotate(str(i), (xs[i],ys[i]))
+    plt.show()
 
     trackseq = track.TrackSequence()
     if cfg_track['style'] == 'fermat':
@@ -180,12 +186,12 @@ if __name__ == '__main__':
     print('write_bent_tline')
     bender.write_bent_tline()
 
-    print('mirror_tline')
-    bender.mirror_tline()
-    print('bend_tline')
-    bender.bend_tline(plot=False)
-    print('write_bent_tline')
-    bender.write_bent_tline()
+    # print('mirror_tline')
+    # bender.mirror_tline()
+    # print('bend_tline')
+    # bender.bend_tline(plot=False)
+    # print('write_bent_tline')
+    # bender.write_bent_tline()
 
     print(f'{floquet.cell_length()*1e6:.1f}um unit cell * {bender.n_floquet_cells:d} unit cells should = {trackseq.total_arclength()*1e6:.0f}um track length')
 
