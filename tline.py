@@ -24,20 +24,20 @@ class FishboneUnitCell:
 
     def vertices(self):
         xvals1 = [0,
-                  self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
-                  self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
+                  self.cell_length / 2 - self.w_line / 2, self.cell_length / 2 - self.w_line / 2,
+                  self.cell_length / 2 + self.w_line / 2, self.cell_length / 2 + self.w_line / 2,
                   self.cell_length]#, self.cell_length,
-                  # self.cell_length / 2 + self.fishbone_length / 2, self.cell_length / 2 + self.fishbone_length / 2,
-                  # self.cell_length / 2 - self.fishbone_length / 2, self.cell_length / 2 - self.fishbone_length / 2,
+                  # self.cell_length / 2 + self.w_line / 2, self.cell_length / 2 + self.w_line / 2,
+                  # self.cell_length / 2 - self.w_line / 2, self.cell_length / 2 - self.w_line / 2,
                   # 0]
 
-        yvals1 = [self.line_width / 2,
-                  self.line_width / 2, self.fishbone_height + self.line_width / 2,
-                  self.fishbone_height + self.line_width / 2, self.line_width / 2,
-                  self.line_width / 2]#, -self.line_width / 2,
-                  # -self.line_width / 2, -self.fishbone_height - self.line_width / 2,
-                  # -self.fishbone_height - self.line_width / 2, -self.line_width / 2,
-                  # -self.line_width / 2
+        yvals1 = [self.w_center_line / 2,
+                  self.w_center_line / 2, self.w_fishbone_line + self.w_center_line / 2,
+                  self.w_fishbone_line + self.w_center_line / 2, self.w_center_line / 2,
+                  self.w_center_line / 2]#, -self.w_center_line / 2,
+                  # -self.w_center_line / 2, -self.w_fishbone_line - self.w_center_line / 2,
+                  # -self.w_fishbone_line - self.w_center_line / 2, -self.w_center_line / 2,
+                  # -self.w_center_line / 2
                   # ]
 
         return np.array((xvals1, yvals1))
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     pass
     import track
 
-    fishboneA = FishboneUnitCell(8e-6, 2e-6, 42e-6, 2e-6, gnd_spacing=2e-6, interdigitate=True)
+    fishboneA = FishboneUnitCell(3e-6, 1.5e-6, 42e-6, 1.5e-6, gnd_spacing=10e-6, interdigitate=False)
     ustrip = FloquetUnitCell()
     ustrip.append_fishbones(fishboneA, 14)
     xs, ys = ustrip.vertices()
