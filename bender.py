@@ -122,12 +122,13 @@ if __name__ == '__main__':
 
         tline_compact_length = cfg_track['compact_length']
 
-    # fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
-    # fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
-    # arc2 = fermat2.construct_suitable_ArcTrack()
-    # arc1 = fermat1.construct_suitable_ArcTrack()
-    # straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
-    # straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
+        #Alec I think had this commented out
+        fermat1 = track.FermatSpiralTrack(turns, min_spacing, True)
+        fermat2 = track.FermatSpiralTrack(turns, min_spacing, False)
+        arc2 = fermat2.construct_suitable_ArcTrack()
+        arc1 = fermat1.construct_suitable_ArcTrack()
+        straight2 = arc2.construct_suitable_StraightTrack(tline_compact_length)
+        straight1 = arc1.construct_suitable_StraightTrack(tline_compact_length)
 
         trackseq.append_track(straight2)
         trackseq.append_track(arc2)
