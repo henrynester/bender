@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     floquet = tline.FloquetUnitCell()
     for w_loaded_line, n_fishbone_cell in zip(cfg_tline['w_loaded_lines'], cfg_tline['n_fishbone_cells']):
-        fishbone = tline.FishboneUnitCell(cfg_tline['fishbone_cell_length'], cfg_tline['w_center_line'], w_loaded_line, cfg_tline['w_center_line'], cfg_tline['gnd_spacing'], cfg_tline['gnd_interdigitate'])
+        fishbone = tline.FishboneUnitCell(cfg_tline['fishbone_cell_length'], cfg_tline['w_center_line'], w_loaded_line, cfg_tline['w_center_line'])
         floquet.append_fishbones(fishbone, n_fishbone_cell)
 
     xs, ys = floquet.vertices()
