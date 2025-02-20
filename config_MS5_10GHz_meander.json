@@ -23,7 +23,7 @@
 		"fillet_radius": null
 	},
 	"track": {
-		"style": "singletary",
+		"style": "meander",
 		"compact_width": 18e-3,
 		"compact_height": 10e-3,
 		"n_half_periods": 4,
