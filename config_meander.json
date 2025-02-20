@@ -18,17 +18,18 @@
 			30,
 			68
 		],
-		"fishbone_cell_length": 3e-6,
+		"fishbone_cell_length": 4e-6,
+		"w_fishbone_line": 1e-6,
 		"w_center_line": 1.5e-6,
 		"gnd_spacing": 1e-6,
-		"gnd_interdigitate": false,
+		"gnd_interdigitate": true,
 		"fillet_radius": null
 	},
 	"track": {
-		"style": "singletary",
-		"compact_width": 5e-3,
-		"compact_height": 5e-3,
-		"n_half_periods": 2,
+		"style": "meander",
+		"compact_width": 20e-3,
+		"compact_height": 11e-3,
+		"n_half_periods": 30,
 		"launch_len": 1e-3,
 		"radius_launch": 1e-3
 	}
