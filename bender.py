@@ -129,7 +129,7 @@ if __name__ == '__main__':
         trackseq.append_track(fermat1)
         trackseq.append_track(arc1)
         trackseq.append_track(straight1)
-    elif cfg_track['style'] == 'singletary':
+    elif cfg_track['style'] == 'meander':
         # filleted square wave shape
 
         # math and variable assignment
