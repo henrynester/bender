@@ -60,6 +60,8 @@ class FloquetUnitCell:
             v = np.append(v, fishbone_vertices, axis=1)
             xstart += fishbone.cell_length
 
+        v = np.append(v, np.array([[xstart+3e-6], [0]]), axis=1)
+
         for fishbone in reversed(self.fishbones):
             xstart -= fishbone.cell_length
             reverse_vertices = fishbone.vertices()
@@ -68,7 +70,9 @@ class FloquetUnitCell:
             reverse_vertices[0,:]+=xstart
             v=np.append(v, reverse_vertices, axis=1)
 
+        v = np.append(v, np.array([[xstart - 3e-6], [0]]), axis=1)
         v = np.append(v, v[:,0:1], axis=1)
+
         return v
 
     def cell_length(self):
@@ -82,7 +86,7 @@ if __name__ == '__main__':
     pass
     import track
 
-    fishboneA = FishboneUnitCell(3e-6, 1.5e-6, 42e-6, 1.5e-6, gnd_spacing=10e-6, interdigitate=False)
+    fishboneA = FishboneUnitCell(3e-6, 1.5e-6, 42e-6, 1.5e-6)
     ustrip = FloquetUnitCell()
     ustrip.append_fishbones(fishboneA, 14)
     xs, ys = ustrip.vertices()

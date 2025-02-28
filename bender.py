@@ -1,7 +1,10 @@
+import math
+
 import track, tline
 import numpy as np, matplotlib.pyplot as plt
 import ezdxf
 from ezdxf import units
+from ezdxf.math import Vec3
 import ezdxf.path
 import progress.bar
 import json, sys
@@ -45,6 +48,7 @@ class Bender:  # uh oh
             plt.show()
 
 
+
     def create_dxf(self):
         self.doc = ezdxf.new()
         self.msp = self.doc.modelspace()
@@ -56,12 +60,14 @@ class Bender:  # uh oh
             first=self.unit_cell_vertices_count*n
             last=first+self.unit_cell_vertices_count
             polygon = [(self.bent_xs[i], self.bent_ys[i]) for i in range(first,last)]
-            
+
+
             if self.fillet_radius is not None:
                 # create path object, fillet path at control vertices (noncollinear points)
                 # then convert to an lwpolyline dxf file entry and add to the file
                 p = ezdxf.path.from_vertices(polygon)
                 p.close()
+
                 pp = ezdxf.path.fillet(p.control_vertices(), radius=self.fillet_radius)
                 out = ezdxf.path.to_lwpolylines((pp,))
                 self.msp.add_lwpolyline(next(out), close=True)
@@ -177,6 +183,16 @@ if __name__ == '__main__':
         trackseq.append_track(delaunchstraight1)
         trackseq.append_track(delaunchcurve1)
         trackseq.append_track(delaunchstraight2)
+
+    elif cfg_track['style'] == 'thru':
+        # math and variable assignment
+        compact_width = cfg_track['compact_width']
+
+        # Building track
+        x_end = compact_width
+
+        launchstraight1 = track.StraightTrack(np.array((0, 0)), np.array((x_end, 0)))
+        trackseq.append_track(launchstraight1)
 
     bender = Bender(trackseq, floquet, cfg_tline['fillet_radius'])
     print('construct_tline')
