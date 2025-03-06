@@ -32,8 +32,8 @@ class FishboneUnitCell:
                   # 0]
 
         yvals1 = [self.w_center_line / 2,
-                  self.w_center_line / 2, self.w_fishbone_line + self.w_center_line / 2,
-                  self.w_fishbone_line + self.w_center_line / 2, self.w_center_line / 2,
+                  self.w_center_line / 2, self.w_fishbone_line / 2,
+                  self.w_fishbone_line / 2, self.w_center_line / 2,
                   self.w_center_line / 2]#, -self.w_center_line / 2,
                   # -self.w_center_line / 2, -self.w_fishbone_line - self.w_center_line / 2,
                   # -self.w_fishbone_line - self.w_center_line / 2, -self.w_center_line / 2,
@@ -60,7 +60,8 @@ class FloquetUnitCell:
             v = np.append(v, fishbone_vertices, axis=1)
             xstart += fishbone.cell_length
 
-        v = np.append(v, np.array([[xstart+3e-6], [0]]), axis=1)
+        v = np.append(v, np.array([[xstart+3e-6], [1.5e-6/2]]), axis=1)
+        v = np.append(v, np.array([[xstart + 3e-6], [-1.5e-6 / 2]]), axis=1)
 
         for fishbone in reversed(self.fishbones):
             xstart -= fishbone.cell_length
@@ -70,7 +71,8 @@ class FloquetUnitCell:
             reverse_vertices[0,:]+=xstart
             v=np.append(v, reverse_vertices, axis=1)
 
-        v = np.append(v, np.array([[xstart - 3e-6], [0]]), axis=1)
+        v = np.append(v, np.array([[xstart - 3e-6], [-1.5e-6 / 2]]), axis=1)
+        v = np.append(v, np.array([[xstart - 3e-6], [1.5e-6/2]]), axis=1)
         v = np.append(v, v[:,0:1], axis=1)
 
         return v

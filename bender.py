@@ -40,6 +40,7 @@ class Bender:  # uh oh
 
         self.bent_xs = xs + us * heights
         self.bent_ys = ys + vs * heights
+        print(max(self.bent_xs)-min(self.bent_xs))
 
         if plot:
             fig,ax=plt.subplots()
@@ -68,12 +69,16 @@ class Bender:  # uh oh
                 p = ezdxf.path.from_vertices(polygon)
                 p.close()
 
-                pp = ezdxf.path.fillet(p.control_vertices(), radius=self.fillet_radius)
+                pp = ezdxf.path.polygonal_fillet(p.control_vertices(), radius=self.fillet_radius, count=32)
+
                 out = ezdxf.path.to_lwpolylines((pp,))
+
                 self.msp.add_lwpolyline(next(out), close=True)
+
             else:
                 # no fillets: polygon point list goes straight into the dxf file
                 self.msp.add_lwpolyline(polygon, close=True)
+                # self.msp.add_polyline2d(polygon, close=True)
             
             bar.next()
         bar.finish()
@@ -103,10 +108,10 @@ if __name__ == '__main__':
 
     xs, ys = floquet.vertices()
     fig, ax = plt.subplots()
-    ax.plot(xs, ys)
-    # for i in range(len(xs)):
-    #     ax.annotate(str(i), (xs[i],ys[i]))
-    plt.show()
+    # ax.plot(xs, ys)
+    # # for i in range(len(xs)):
+    # #     ax.annotate(str(i), (xs[i],ys[i]))
+    # plt.show()
 
     trackseq = track.TrackSequence()
     if cfg_track['style'] == 'fermat':
